@@ -1,4 +1,3 @@
-use std::env;
 use std::fs;
 
 fn main() {
@@ -8,9 +7,6 @@ fn main() {
         "There are {} measurements that are larger than the previous.",
         sonar_sweep(&data_array)
     );
-    // for data in data_array {
-    //     println!("{}",data);
-    // }
 }
 
 fn read_input(puzzle: &str) -> Vec<i32> {
