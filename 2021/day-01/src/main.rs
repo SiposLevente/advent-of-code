@@ -1,6 +1,5 @@
 use std::env;
 use std::fs;
-use std::io::BufRead;
 
 fn main() {
     let data_array: Vec<i32> = read_input("puzzle.txt");
