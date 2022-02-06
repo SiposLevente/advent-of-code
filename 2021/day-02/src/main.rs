@@ -1,16 +1,7 @@
-// forward X increases the horizontal position by X units.
-// down X increases the depth by X units.
-// up X decreases the depth by X units.
+use std::fs;
 
 fn main() {
-    let data_array = vec![
-        "forward 5",
-        "down 5",
-        "forward 8",
-        "up 3",
-        "down 8",
-        "forward 2",
-    ];
+    let data_array = read_input("puzzle.txt");
 
     let position = submarine_commands(&data_array).0;
 
@@ -18,10 +9,20 @@ fn main() {
 
     let val = position * depth;
 
-    println!("position: {}\ndepth: {}\nSolution value: {}", position, depth, val);
+    println!(
+        "position: {}\ndepth: {}\nSolution value: {}",
+        position, depth, val
+    );
 }
 
-fn submarine_commands(data_array: &Vec<&str>) -> (i32, i32) {
+fn read_input(puzzle: &str) -> Vec<String> {
+    match fs::read_to_string(puzzle) {
+        Ok(i) => i.lines().map(|x| x.clone().to_string()).collect(),
+        Err(e) => panic!("{}", e),
+    }
+}
+
+fn submarine_commands(data_array: &Vec<String>) -> (i32, i32) {
     let mut position = 0;
     let mut depth = 0;
 
@@ -40,9 +41,15 @@ fn submarine_commands(data_array: &Vec<&str>) -> (i32, i32) {
             .expect("Error in parsing");
 
         match direction {
-            "forward" => {position += unit;}
-            "up" => {depth -= unit;}
-            "down" => {depth += unit;}
+            "forward" => {
+                position += unit;
+            }
+            "up" => {
+                depth -= unit;
+            }
+            "down" => {
+                depth += unit;
+            }
             _ => panic!("Error in direction"),
         };
     }
