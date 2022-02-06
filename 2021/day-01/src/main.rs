@@ -1,8 +1,26 @@
+use std::env;
+use std::fs;
+use std::io::BufRead;
+
 fn main() {
-    let data_array: Vec<i32> = vec![199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
-    println!("There are {} measurements that are larger than the previous.", sonar_sweep(&data_array));
-    for data in data_array {
-        println!("{}",data);
+    let data_array: Vec<i32> = read_input("puzzle.txt");
+
+    println!(
+        "There are {} measurements that are larger than the previous.",
+        sonar_sweep(&data_array)
+    );
+    // for data in data_array {
+    //     println!("{}",data);
+    // }
+}
+
+fn read_input(puzzle: &str) -> Vec<i32> {
+    match fs::read_to_string(puzzle) {
+        Ok(i) => {
+            let lines: Vec<i32> = i.lines().map(|x| x.parse().unwrap()).collect();
+            lines
+        }
+        Err(e) => panic!("{}", e),
     }
 }
 
