@@ -12,7 +12,7 @@ impl Map {
     }
 
     pub fn mark(&mut self, point: Point<isize>) {
-        self.map[point.get_y() as usize][point.get_x() as usize] += 1;
+        self.map[point.x as usize][point.x as usize] += 1;
     }
 
     pub fn to_string(&self) -> String {

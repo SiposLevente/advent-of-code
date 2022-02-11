@@ -18,22 +18,22 @@ impl Line {
 
     pub fn line_cords(&mut self) -> Vec<Point<isize>> {
         let mut points: Vec<Point<isize>> = vec![];
-        let p = Point::new(self.p1.get_x(), self.p1.get_y());
+        let p = Point::new(self.p1.x, self.p1.y);
         points.push(p);
 
         while self.p1 != self.p2 {
-            if self.p1.get_x() < self.p2.get_x() {
+            if self.p1.x < self.p2.x {
                 self.p1.offset(1, 0);
-            } else if self.p1.get_x() > self.p2.get_x() {
+            } else if self.p1.x > self.p2.x {
                 self.p1.offset(-1, 0);
             }
 
-            if self.p1.get_y() < self.p2.get_y() {
+            if self.p1.y < self.p2.y {
                 self.p1.offset(0, 1);
-            } else if self.p1.get_y() > self.p2.get_y() {
+            } else if self.p1.y > self.p2.y {
                 self.p1.offset(0, -1);
             }
-            let p = Point::new(self.p1.get_x(), self.p1.get_y());
+            let p = Point::new(self.p1.x, self.p1.y);
             points.push(p);
         }
 
