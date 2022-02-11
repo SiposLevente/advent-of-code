@@ -1,4 +1,3 @@
-#[derive(Copy, Clone, Debug)]
 pub struct BingoNum {
     number: usize,
     marked: bool,
@@ -12,11 +11,11 @@ impl BingoNum {
 
 pub struct Board {
     board_size: usize,
-    numbers: [BingoNum; 25],
+    numbers: Vec<BingoNum>,
 }
 
 impl Board {
-    pub fn new(numbers: [BingoNum; 25], board_size: usize) -> Board {
+    pub fn new(numbers: Vec<BingoNum>, board_size: usize) -> Board {
         Board {
             board_size,
             numbers,
@@ -63,7 +62,7 @@ impl Board {
 
     pub fn sum_non_marked_numbers(&self) -> usize {
         let mut sum = 0;
-        for num in self.numbers {
+        for num in &self.numbers {
             if !num.marked {
                 sum += num.number;
             }
@@ -81,17 +80,12 @@ impl Board {
         (x, y)
     }
 
-    pub fn convert_to_bingo_numbers(number_array: &[usize; 25]) -> [BingoNum; 25] {
-        let mut bingo_array = [BingoNum {
-            number: 0,
-            marked: false,
-        }; 25];
-        let mut counter = 0;
+    pub fn convert_to_bingo_numbers(number_array: &Vec<usize>) -> Vec<BingoNum> {
+        let mut bingo_array = vec![];
 
         for num in number_array {
             let bingo_num = BingoNum::new(*num, false);
-            bingo_array[counter] = bingo_num;
-            counter += 1;
+            bingo_array.push(bingo_num);
         }
 
         bingo_array

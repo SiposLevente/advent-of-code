@@ -1,44 +1,17 @@
 use crate::bingo_board::Board;
+use std::fs;
 
 mod bingo_board;
 
 fn main() {
-    println!("Hello, world!");
-    let data_array = [
-        7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19, 3,
-        26, 1,
-    ];
+    let data_array = read_bingo_number("bingo_numbers.txt");
 
-    let card1_nums = [
-        22, 13, 17, 11, 0, 8, 2, 23, 4, 24, 21, 9, 14, 16, 7, 6, 10, 3, 18, 5, 1, 12, 20, 15, 19,
-    ];
-    let card1 = Board::new(Board::convert_to_bingo_numbers(&card1_nums), 5);
+    let bingo_array: Vec<Vec<usize>> = read_bingo_boards("bingo_boards.txt", 5);
+    let mut bingo_cards: Vec<Board> = vec![];
 
-    let card2_nums = [
-        3, 15, 0, 2, 22, 9, 18, 13, 17, 5, 19, 8, 7, 25, 23, 20, 11, 10, 24, 4, 14, 21, 16, 12, 6,
-    ];
-    let card2 = Board::new(Board::convert_to_bingo_numbers(&card2_nums), 5);
-
-    let card3_nums = [
-        14, 21, 17, 24, 4, 10, 16, 15, 9, 19, 18, 8, 23, 26, 20, 22, 11, 13, 6, 5, 2, 0, 12, 3, 7,
-    ];
-    let card3 = Board::new(Board::convert_to_bingo_numbers(&card3_nums), 5);
-
-    let mut bingo_cards = [card1, card2, card3];
-
-    // for num in data_array {
-    //     for card in &mut bingo_cards {
-    //         let coord = card.mark_num(num);
-    //         if let Some(xy) = coord {
-    //             if card.check_bingo(xy.0, xy.1) {
-    //                 let sum = card.sum_non_marked_numbers();
-    //                 println!("Sum of non marked numbers: {}", sum);
-    //                 println!("Number that has been just called: {}", &num);
-    //                 println!("Solution: {}", sum * &num);
-    //             }
-    //         }
-    //     }
-    // }
+    for i in bingo_array {
+        bingo_cards.push(Board::new(Board::convert_to_bingo_numbers(&i), 5));
+    }
 
     let mut game_won = false;
     let mut num_counter = 0;
@@ -65,4 +38,61 @@ fn main() {
 
         num_counter += 1;
     }
+}
+
+fn read_bingo_number(bingo_number_file: &str) -> Vec<usize> {
+    let numbers = if let Ok(i) = fs::read_to_string(bingo_number_file) {
+        i
+    } else {
+        panic!("Failed to read file!");
+    };
+
+    numbers.split(',').map(|x| x.parse().unwrap()).collect()
+}
+
+fn read_bingo_boards(bingo_board_file: &str, bingo_size: usize) -> Vec<Vec<usize>> {
+    let boards = if let Ok(i) = fs::read_to_string(bingo_board_file) {
+        i
+    } else {
+        panic!("Failed to read file!");
+    };
+
+    let mut num_collection: Vec<usize> = vec![];
+    let mut counter = 0;
+    for i in boards.lines() {
+        match counter % (bingo_size + 1) {
+            0 | 1 | 2 | 3 | 4 => {
+                let nums: Vec<usize> = i
+                    .replace("  ", " ")
+                    .trim()
+                    .split(" ")
+                    .map(|x| x.parse().unwrap())
+                    .collect();
+                for num in nums {
+                    num_collection.push(num);
+                }
+            }
+
+            _ => (),
+        }
+        counter += 1;
+    }
+
+    let mut bingo_boards: Vec<Vec<usize>> = vec![vec![]];
+    let mut vector_counter = 0;
+    let mut counter = 0;
+
+    for i in num_collection {
+        if counter < bingo_size * bingo_size {
+            bingo_boards[vector_counter].push(i);
+        } else {
+            bingo_boards.push(vec![]);
+            vector_counter += 1;
+            bingo_boards[vector_counter].push(i);
+            counter = 0;
+        }
+        counter += 1;
+    }
+
+    bingo_boards
 }
