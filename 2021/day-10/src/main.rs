@@ -1,31 +1,31 @@
 fn main() {
-    let data_array = vec![
-        "[({(<(())[]>[[{[]{<()<>>",
-        "[(()[<>])]({[<{<<[]>>(",
-        "{([(<{}[<>[]}>{[]{[(<()>",
-        "(((({<>}<{<{<>}{[]{[]{}",
-        "[[<[([]))<([[{}[[()]]]",
-        "[{[{({}]{}}([{[{{{}}([]",
-        "{<[[]]>}<{[{[{[]{()[[[]",
-        "[<(<(<(<{}))><([]([]()",
-        "<{([([[(<>()){}]>(<<{{",
-        "<{([{{}}[<[[[<>{}]]]>[]]",
-    ];
+    // let data_array = vec![
+    //     "[({(<(())[]>[[{[]{<()<>>",
+    //     "[(()[<>])]({[<{<<[]>>(",
+    //     "{([(<{}[<>[]}>{[]{[(<()>",
+    //     "(((({<>}<{<{<>}{[]{[]{}",
+    //     "[[<[([]))<([[{}[[()]]]",
+    //     "[{[{({}]{}}([{[{{{}}([]",
+    //     "{<[[]]>}<{[{[{[]{()[[[]",
+    //     "[<(<(<(<{}))><([]([]()",
+    //     "<{([([[(<>()){}]>(<<{{",
+    //     "<{([{{}}[<[[[<>{}]]]>[]]",
+    // ];
 
-    let corrupted_lines = get_corrupted(data_array);
+    let corrupted_lines = get_corrupted(read_puzzle("puzzle.txt"));
 
-    for lines in &corrupted_lines {
-        println!("{}", *lines);
-    }
+    // for lines in &corrupted_lines {
+    //     println!("{}", *lines);
+    // }
 
     let point = point_corrupted(corrupted_lines);
 
     println!("The total syntax error score is: {}", point);
 }
 
-fn get_corrupted(data_array: Vec<&str>) -> Vec<&str> {
+fn get_corrupted(data_array: Vec<String>) -> Vec<String> {
     let mut stack: Vec<char> = vec![];
-    let mut ret: Vec<&str> = vec![];
+    let mut ret: Vec<String> = vec![];
 
     for line in data_array {
         let mut is_corrupted = false;
@@ -59,7 +59,7 @@ fn get_corrupted(data_array: Vec<&str>) -> Vec<&str> {
     ret
 }
 
-fn point_corrupted(data_array: Vec<&str>) -> isize {
+fn point_corrupted(data_array: Vec<String>) -> isize {
     let mut stack: Vec<char> = vec![];
     let mut point = 0;
 
@@ -93,4 +93,11 @@ fn point_corrupted(data_array: Vec<&str>) -> isize {
         }
     }
     point
+}
+
+fn read_puzzle(puzzle: &str) -> Vec<String> {
+    match std::fs::read_to_string(puzzle) {
+        Ok(i) => i.lines().map(|x| x.clone().to_string()).collect(),
+        Err(e) => panic!("{}", e),
+    }
 }
