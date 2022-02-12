@@ -1,21 +1,16 @@
 pub mod line;
 pub mod map;
+
 use line::Line;
 use map::Map;
 
 fn main() {
-    let mut map = Map::new();
-    let l1 = Line::new_from_coords(0, 9, 5, 9);
-    let l2 = Line::new_from_coords(8, 0, 0, 8);
-    let l3 = Line::new_from_coords(9, 4, 3, 4);
-    let l4 = Line::new_from_coords(2, 2, 2, 1);
-    let l5 = Line::new_from_coords(7, 0, 7, 4);
-    let l6 = Line::new_from_coords(6, 4, 2, 0);
-    let l7 = Line::new_from_coords(0, 9, 2, 9);
-    let l8 = Line::new_from_coords(3, 4, 1, 4);
-    let l9 = Line::new_from_coords(0, 0, 8, 8);
-    let l10 = Line::new_from_coords(5, 5, 8, 2);
-    let lines = vec![l1, l2, l3, l4, l5, l6, l7, l8, l9, l10];
+    let mut map = Map::new(1000);
+    let lines = if let Ok(i) = read_data("puzzle.txt") {
+        i
+    } else {
+        panic!("Invalid file!");
+    };
 
     for mut line in lines {
         for point in line.line_cords() {
@@ -23,8 +18,33 @@ fn main() {
         }
     }
 
-    println!("{}",map.to_string());
+    //println!("{}", map.to_string());
 
     println!("Dangerous areas: {}", map.count_dangerous_areas());
+}
 
+fn read_data<'a>(file: &'a str) -> Result<Vec<Line>, std::io::Error> {
+    let data_string = std::fs::read_to_string(file)?;
+    let mut lines: Vec<Line> = vec![];
+
+    let touple_vector: Vec<(&str, &str)> = data_string
+        .lines()
+        .map(|x| x.split_once(" -> ").unwrap())
+        .collect();
+
+    for i in touple_vector {
+        let new_p1_str = i.0.split_once(",").expect("Invalid data!");
+        let new_p2_str = i.1.split_once(",").expect("Invalid data!");
+
+        let p1x = new_p1_str.0.parse().expect("Invalid coordinate!");
+        let p1y = new_p1_str.1.parse().expect("Invalid coordinate!");
+        let p2x = new_p2_str.0.parse().expect("Invalid coordinate!");
+        let p2y = new_p2_str.1.parse().expect("Invalid coordinate!");
+
+        if p1x == p2x || p1y == p2y {
+            lines.push(Line::new_from_coords(p1x, p1y, p2x, p2y));
+        }
+    }
+
+    Ok(lines)
 }

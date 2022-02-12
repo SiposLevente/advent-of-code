@@ -5,14 +5,14 @@ pub struct Map {
 }
 
 impl Map {
-    pub fn new() -> Map {
+    pub fn new(size: usize) -> Map {
         Map {
-            map: vec![vec![0; 10]; 10],
+            map: vec![vec![0; size]; size],
         }
     }
 
     pub fn mark(&mut self, point: Point<isize>) {
-        self.map[point.x as usize][point.x as usize] += 1;
+        self.map[point.y as usize][point.x as usize] += 1;
     }
 
     pub fn to_string(&self) -> String {
