@@ -14,7 +14,7 @@ impl Position {
 }
 
 fn main() {
-    let crab_positions = vec![16, 1, 2, 0, 4, 2, 7, 1, 2, 14];
+    let crab_positions = read_puzzle("puzzle.txt");
     let mut starter_fuel_cost = 0;
     if let Some(i) = calculate_fuel_cost(&crab_positions, 0, -1) {
         starter_fuel_cost = i;
@@ -29,8 +29,6 @@ fn main() {
         if let Some(fuel_cost) = calculate_fuel_cost(&crab_positions, i, optimal_pos.fuel_cost) {
             optimal_pos.fuel_cost = fuel_cost;
             optimal_pos.position = i;
-        } else {
-            println!("{} position is not optimal!", i);
         }
     }
 
@@ -54,4 +52,22 @@ fn calculate_fuel_cost(array: &Vec<isize>, position: isize, compare_val: isize) 
         counter += 1;
     }
     Some(cost)
+}
+
+fn read_puzzle(file_path: &str) -> Vec<isize> {
+    let data = if let Ok(i) = std::fs::read_to_string(file_path) {
+        i
+    } else {
+        panic!("Error reading file!");
+    };
+
+    if let Some(i) = data.lines().next() {
+        i.split(",")
+            .collect::<Vec<&str>>()
+            .iter()
+            .map(|x| x.trim().parse().unwrap())
+            .collect()
+    } else {
+        panic!("Invalid input!");
+    }
 }
