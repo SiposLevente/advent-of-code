@@ -1,6 +1,7 @@
 pub mod line;
 pub mod map;
 
+use std::error::Error;
 use line::Line;
 use map::Map;
 
@@ -23,7 +24,7 @@ fn main() {
     println!("Dangerous areas: {}", map.count_dangerous_areas());
 }
 
-fn read_data<'a>(file: &'a str) -> Result<Vec<Line>, std::io::Error> {
+fn read_data<'a>(file: &'a str) -> Result<Vec<Line>, Box<dyn Error>> {
     let data_string = std::fs::read_to_string(file)?;
     let mut lines: Vec<Line> = vec![];
 
@@ -36,10 +37,10 @@ fn read_data<'a>(file: &'a str) -> Result<Vec<Line>, std::io::Error> {
         let new_p1_str = i.0.split_once(",").expect("Invalid data!");
         let new_p2_str = i.1.split_once(",").expect("Invalid data!");
 
-        let p1x = new_p1_str.0.parse().expect("Invalid coordinate!");
-        let p1y = new_p1_str.1.parse().expect("Invalid coordinate!");
-        let p2x = new_p2_str.0.parse().expect("Invalid coordinate!");
-        let p2y = new_p2_str.1.parse().expect("Invalid coordinate!");
+        let p1x = new_p1_str.0.parse()?;
+        let p1y = new_p1_str.1.parse()?;
+        let p2x = new_p2_str.0.parse()?;
+        let p2y = new_p2_str.1.parse()?;
 
         if p1x == p2x || p1y == p2y {
             lines.push(Line::new_from_coords(p1x, p1y, p2x, p2y));
