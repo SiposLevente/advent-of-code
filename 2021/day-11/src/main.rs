@@ -4,22 +4,24 @@ mod squid;
 
 fn main() {
     let mut squids = read_input("squids.txt");
+
     let step: isize = args().nth(1).unwrap().parse().unwrap();
 
     for _ in 0..step {
         for x in 0..squids.len() {
             for y in 0..squids[0].len() {
-                if squids[x][y].energy > 9 && !squids[x][y].flashed {
+                squids[x][y].increase_energy();
+                if squids[x][y].energy > 9 {
                     squids[x][y].flashed = true;
                     increase_neighbours(&mut squids, x, y);
                 }
             }
         }
-        increase_levels(&mut squids);
-        for x in 0..squids.len() {
-            for y in 0..squids[0].len() {
-                if squids[x][y].energy > 9 {
-                    squids[x][y].energy = 0;
+
+        for lines in squids.iter_mut() {
+            for squid in lines {
+                if squid.energy > 9 {
+                    squid.energy = 0;
                 }
             }
         }
@@ -33,26 +35,21 @@ fn main() {
     }
 }
 
-fn increase_levels(squids: &mut Vec<Vec<Squid>>) {
-    for x in 0..squids.len() {
-        for y in 0..squids[0].len() {
-            squids[x][y].increase_energy();
-        }
-    }
-}
-
 fn increase_neighbours(squids: &mut Vec<Vec<Squid>>, x: usize, y: usize) {
-    for x_diff in -1 as isize..2 {
-        let x_delta = x_diff + x as isize;
-        for y_diff in -1 as isize..2 {
-            let y_delta = y_diff + y as isize;
-            if y_diff == 0 && x_diff != 0
-                || y_diff != 0 && x_diff == 0
-                || y_diff != 0 && x_diff != 0
-            {
-                if x_delta >= 0 && (x_delta as isize) < squids.len() as isize {
-                    if y_delta >= 0 && (y_delta) < squids[0].len() as isize {
-                        squids[x_delta as usize][y_delta as usize].increase_energy();
+    if !squids[x][y].flashed {
+        for x_diff in -1 as isize..2 {
+            let x_delta = x_diff + x as isize;
+            for y_diff in -1 as isize..2 {
+                let y_delta = y_diff + y as isize;
+
+                if y_diff == 0 && x_diff != 0
+                    || y_diff != 0 && x_diff == 0
+                    || y_diff != 0 && x_diff != 0
+                {
+                    if x_delta >= 0 && x_delta < squids.len() as isize {
+                        if y_delta >= 0 && y_delta < squids[0].len() as isize {
+                            squids[x_delta as usize][y_delta as usize].increase_energy();
+                        }
                     }
                 }
             }
