@@ -1,3 +1,3 @@
 # Advent of code
 
-Solutions made in rust!
+Solutions made in various languages!
