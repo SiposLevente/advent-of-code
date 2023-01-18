@@ -5,7 +5,7 @@ const END_NODE_NAME: &str = "end";
 
 pub struct CaveMap {
     nodes: HashMap<String, Vec<String>>,
-    routes: Vec<String>,
+    pub routes: Vec<Vec<String>>,
 }
 
 impl CaveMap {
@@ -13,31 +13,30 @@ impl CaveMap {
         CaveMap::generate_from_file(input_text)
     }
 
-    pub fn start_search(self) {
+    pub fn start_search(&mut self) {
         if self.nodes.contains_key(START_NODE_NAME) {
-            let mut route_string = String::from(START_NODE_NAME);
-            self.search(route_string, START_NODE_NAME);
+            CaveMap::search(self, START_NODE_NAME, &mut vec![]);
         } else {
             panic!("Error in routes! No node name start found!");
         }
     }
 
-    pub fn search(mut self, route_string: String, node_name: &str) {
+    pub fn search(map: &mut CaveMap, node_name: &str, visited_nodes: &mut Vec<String>) {
         if node_name == END_NODE_NAME {
-            self.routes.push(route_string);
+            visited_nodes.push(END_NODE_NAME.to_string());
+            map.routes.push(visited_nodes.clone());
         } else {
-
-            if self.nodes.contains_key(node_name){
-
-            } else {
-                
-            }
-
-
-            if let Some(start_node_vector) = self.nodes.get(node_name) {
-                
-            } else {
-                panic!("Error in routes! No node name start found!");
+            if map.nodes.contains_key(node_name) {
+                if let Some(node_vector) = map.nodes.clone().get(node_name) {
+                    visited_nodes.push(node_name.to_string());
+                    for node in node_vector {
+                        if !visited_nodes.contains(&node.to_string())
+                            || CaveMap::is_big_cave(node.to_string())
+                        {
+                            CaveMap::search(map, &node, &mut visited_nodes.clone());
+                        }
+                    }
+                }
             }
         }
     }
@@ -69,6 +68,19 @@ impl CaveMap {
                     } else {
                         if let Some(element) = map.nodes.get_mut(line_content[0]) {
                             element.push(line_content[1].to_string());
+                        }
+                    }
+
+                    if !map.nodes.contains_key(line_content[1]) {
+                        map.nodes.insert(
+                            line_content[1].to_string(),
+                            vec![line_content[0].to_string()],
+                        );
+                    } else {
+                        if let Some(element) = map.nodes.get_mut(line_content[1]) {
+                            if !element.contains(&line_content[0].to_string()) {
+                                element.push(line_content[0].to_string());
+                            }
                         }
                     }
                 }
