@@ -1,4 +1,4 @@
-use std::{borrow::BorrowMut, fmt::Display, vec};
+use std::{fmt::Display, vec};
 
 #[derive(Clone)]
 pub enum FoldInstruction {
@@ -98,7 +98,7 @@ impl TransparentPaper {
             }
             x_counter += 1;
         }
-        return counter;
+        counter
     }
 }
 

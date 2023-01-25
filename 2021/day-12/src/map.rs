@@ -25,16 +25,14 @@ impl CaveMap {
         if node_name == END_NODE_NAME {
             visited_nodes.push(END_NODE_NAME.to_string());
             map.routes.push(visited_nodes.clone());
-        } else {
-            if map.nodes.contains_key(node_name) {
-                if let Some(node_vector) = map.nodes.clone().get(node_name) {
-                    visited_nodes.push(node_name.to_string());
-                    for node in node_vector {
-                        if !visited_nodes.contains(&node.to_string())
-                            || CaveMap::is_big_cave(node.to_string())
-                        {
-                            CaveMap::search(map, &node, &mut visited_nodes.clone());
-                        }
+        } else if map.nodes.contains_key(node_name) {
+            if let Some(node_vector) = map.nodes.clone().get(node_name) {
+                visited_nodes.push(node_name.to_string());
+                for node in node_vector {
+                    if !visited_nodes.contains(&node.to_string())
+                        || CaveMap::is_big_cave(node.to_string())
+                    {
+                        CaveMap::search(map, node, &mut visited_nodes.clone());
                     }
                 }
             }
@@ -42,7 +40,7 @@ impl CaveMap {
     }
 
     fn is_big_cave(cave_sign: String) -> bool {
-        if let Some(chr) = cave_sign.chars().nth(0) {
+        if let Some(chr) = cave_sign.chars().next() {
             chr.is_uppercase()
         } else {
             panic!("Invalid cave sign!");
@@ -65,10 +63,8 @@ impl CaveMap {
                             line_content[0].to_string(),
                             vec![line_content[1].to_string()],
                         );
-                    } else {
-                        if let Some(element) = map.nodes.get_mut(line_content[0]) {
-                            element.push(line_content[1].to_string());
-                        }
+                    } else if let Some(element) = map.nodes.get_mut(line_content[0]) {
+                        element.push(line_content[1].to_string());
                     }
 
                     if !map.nodes.contains_key(line_content[1]) {
@@ -76,11 +72,9 @@ impl CaveMap {
                             line_content[1].to_string(),
                             vec![line_content[0].to_string()],
                         );
-                    } else {
-                        if let Some(element) = map.nodes.get_mut(line_content[1]) {
-                            if !element.contains(&line_content[0].to_string()) {
-                                element.push(line_content[0].to_string());
-                            }
+                    } else if let Some(element) = map.nodes.get_mut(line_content[1]) {
+                        if !element.contains(&line_content[0].to_string()) {
+                            element.push(line_content[0].to_string());
                         }
                     }
                 }
