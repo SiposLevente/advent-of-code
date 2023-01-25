@@ -8,10 +8,10 @@ pub struct Squid {
 
 impl Squid {
     pub fn new(energy: i32) -> Squid {
-        return Squid {
+        Squid {
             energy,
             flashed: false,
-        };
+        }
     }
 
     pub fn increase_energy(&mut self) {

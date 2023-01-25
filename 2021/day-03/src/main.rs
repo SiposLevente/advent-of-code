@@ -27,7 +27,7 @@ pub fn read_input(puzzle: &str) -> (Vec<usize>, usize) {
                 let mut real_data = 0;
                 for character in 0..len {
                     if data.chars().nth(character).unwrap() == '1' {
-                        real_data += 1 << len - character - 1;
+                        real_data += 1 << (len - character - 1);
                         println!("{}", real_data);
                     }
                 }

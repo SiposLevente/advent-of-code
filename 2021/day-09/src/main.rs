@@ -33,28 +33,28 @@ fn main() {
 
     let is_low_point = |x: usize, y: usize| {
         let curr_data = data[y][x];
-        
+
         if x != 0 {
             let adj_data = data[y][x - 1];
-            if adj_data == curr_data || adj_data < curr_data {
+            if adj_data <= curr_data {
                 return false;
             }
         }
         if y != 0 {
             let adj_data = data[y - 1][x];
-            if adj_data == curr_data || adj_data < curr_data {
+            if adj_data <= curr_data {
                 return false;
             }
         }
         if x != data[0].len() - 1 {
             let adj_data = data[y][x + 1];
-            if adj_data == curr_data || adj_data < curr_data {
+            if adj_data <= curr_data {
                 return false;
             }
         }
         if y != data.len() - 1 {
             let adj_data = data[y + 1][x];
-            if adj_data == curr_data || adj_data < curr_data {
+            if adj_data <= curr_data {
                 return false;
             }
         }
@@ -71,7 +71,7 @@ fn main() {
         }
     }
 
-    print!("{:?}\n", low_points);
+    println!("{:?}", low_points);
     let low_points_sum: isize = low_points.iter().map(|x| x + 1).sum();
 
     println!(

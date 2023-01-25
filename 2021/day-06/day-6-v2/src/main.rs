@@ -1,4 +1,4 @@
-use std::{fs};
+use std::fs;
 
 fn main() {
     let days_to_observe = 80;
@@ -6,7 +6,7 @@ fn main() {
     let mut school = read_puzzle("puzzle.txt");
     //println!("Initial day:\t{:?}", school);
 
-    for i in 1..=days_to_observe {
+    for _i in 1..=days_to_observe {
         for fish in 0..school.len() {
             school[fish] -= 1;
             if school[fish] < 0 {
@@ -37,7 +37,7 @@ fn read_puzzle(file_path: &str) -> Vec<isize> {
     };
 
     if let Some(i) = data.lines().next() {
-        i.split(",")
+        i.split(',')
             .collect::<Vec<&str>>()
             .iter()
             .map(|x| x.trim().parse().unwrap())

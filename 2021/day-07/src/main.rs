@@ -41,12 +41,10 @@ fn main() {
 fn calculate_fuel_cost(array: &Vec<isize>, position: isize, compare_val: isize) -> Option<isize> {
     let mut cost = 0;
     let mut counter = 0;
-    let mut stop = false;
 
-    while counter < array.len() && !stop {
+    while counter < array.len() {
         cost += isize::abs(position - array[counter]);
         if cost > compare_val && compare_val != -1 {
-            stop = true;
             return None;
         }
         counter += 1;
@@ -62,7 +60,7 @@ fn read_puzzle(file_path: &str) -> Vec<isize> {
     };
 
     if let Some(i) = data.lines().next() {
-        i.split(",")
+        i.split(',')
             .collect::<Vec<&str>>()
             .iter()
             .map(|x| x.trim().parse().unwrap())

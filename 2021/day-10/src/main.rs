@@ -97,7 +97,7 @@ fn point_corrupted(data_array: Vec<String>) -> isize {
 
 fn read_puzzle(puzzle: &str) -> Vec<String> {
     match std::fs::read_to_string(puzzle) {
-        Ok(i) => i.lines().map(|x| x.clone().to_string()).collect(),
+        Ok(i) => i.lines().map(|x| <&str>::clone(&x).to_string()).collect(),
         Err(e) => panic!("{}", e),
     }
 }

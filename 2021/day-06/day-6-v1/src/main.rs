@@ -5,10 +5,10 @@ fn main() {
     let initial_values = vec![3, 4, 3, 1, 2];
     let mut school = Lanternfish::create_school_of_lanternfish(initial_values);
     print!("Initial state:\t\t");
-    for fish in 0..school.len() - 1 {
-        print!("{},", school[fish]);
+    for fish in school.iter().take(school.len() - 1) {
+        print!("{},", fish);
     }
-    print!("{}\n", school[school.len() - 1]);
+    println!("{}", school[school.len() - 1]);
 
     let days_to_run = 80;
     for i in 1..=days_to_run {
@@ -19,10 +19,10 @@ fn main() {
                 school.push(new_fish);
             }
         }
-        for fish in 0..school.len() - 1 {
-            print!("{},", school[fish]);
+        for fish in school.iter().take(school.len() - 1) {
+            print!("{},", fish);
         }
-        print!("{}\n", school[school.len() - 1]);
+        println!("{}", school[school.len() - 1]);
     }
 
     println!("After {} days there are: {} fish",days_to_run, school.len());

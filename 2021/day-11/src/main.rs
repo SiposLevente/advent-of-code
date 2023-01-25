@@ -26,7 +26,7 @@ fn main() {
                     x += 1
                 }
 
-                if squids[x][y].energy > 9 && !squids[x][y].flashed  {
+                if squids[x][y].energy > 9 && !squids[x][y].flashed {
                     break;
                 }
 
@@ -39,7 +39,7 @@ fn main() {
         }
 
         for x in 0..squids.len() {
-            for y in 0..squids[0].len() {
+            for y in 0..squids[x].len() {
                 if squids[x][y].energy > 9 {
                     squids[x][y].flashed = false;
                     squids[x][y].energy = 0;
@@ -60,7 +60,7 @@ fn main() {
 
 fn increase_energy(squids: &mut Vec<Vec<Squid>>) {
     for x in 0..squids.len() {
-        for y in 0..squids[0].len() {
+        for y in 0..squids[x].len() {
             squids[x][y].increase_energy();
         }
     }
@@ -76,8 +76,8 @@ fn increase_neighbours(squids: &mut Vec<Vec<Squid>>, x: usize, y: usize) {
                 || y_diff != 0 && x_diff == 0
                 || y_diff != 0 && x_diff != 0
             {
-                if x_delta >= 0 && x_delta < squids.len() as isize {
-                    if y_delta >= 0 && y_delta < squids[0].len() as isize {
+                if x_delta >= 0 && x_delta < (squids.len()) as isize {
+                    if y_delta >= 0 && y_delta < (squids[x].len()) as isize {
                         squids[x_delta as usize][y_delta as usize].increase_energy();
                     }
                 }

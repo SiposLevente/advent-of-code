@@ -58,14 +58,13 @@ fn read_bingo_boards(bingo_board_file: &str, bingo_size: usize) -> Vec<Vec<usize
     };
 
     let mut num_collection: Vec<usize> = vec![];
-    let mut counter = 0;
-    for i in boards.lines() {
+    for (counter,i) in boards.lines().enumerate() {
         match counter % (bingo_size + 1) {
             0 | 1 | 2 | 3 | 4 => {
                 let nums: Vec<usize> = i
                     .replace("  ", " ")
                     .trim()
-                    .split(" ")
+                    .split(' ')
                     .map(|x| x.parse().unwrap())
                     .collect();
                 for num in nums {
@@ -75,7 +74,6 @@ fn read_bingo_boards(bingo_board_file: &str, bingo_size: usize) -> Vec<Vec<usize
 
             _ => (),
         }
-        counter += 1;
     }
 
     let mut bingo_boards: Vec<Vec<usize>> = vec![vec![]];

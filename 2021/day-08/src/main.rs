@@ -5,9 +5,9 @@ fn main() {
 
     let mut counter = 0;
     for data in data_array {
-        if data.contains("|") {
+        if data.contains('|') {
             counter += data
-                .split("|")
+                .split('|')
                 .nth(1)
                 .unwrap()
                 .split_whitespace()
@@ -23,7 +23,7 @@ fn main() {
 
 fn get_puzzle(puzzle: &str) -> Vec<String> {
     match fs::read_to_string(puzzle) {
-        Ok(i) => i.lines().map(|x| x.clone().to_string()).collect(),
+        Ok(i) => i.lines().map(|x| <&str>::clone(&x).to_string()).collect(),
         Err(e) => panic!("{}", e),
     }
 }

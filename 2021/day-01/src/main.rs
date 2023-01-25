@@ -19,7 +19,7 @@ fn read_input(puzzle: &str) -> Vec<i32> {
     }
 }
 
-fn sonar_sweep(data_array: &Vec<i32>) -> i32 {
+fn sonar_sweep(data_array: &[i32]) -> i32 {
     let mut counter = 0;
     let mut prev_data = data_array[0];
 

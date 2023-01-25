@@ -17,7 +17,7 @@ fn main() {
 
 fn read_input(puzzle: &str) -> Vec<String> {
     match fs::read_to_string(puzzle) {
-        Ok(i) => i.lines().map(|x| x.clone().to_string()).collect(),
+        Ok(i) => i.lines().map(|x| <&str>::clone(&x).to_string()).collect(),
         Err(e) => panic!("{}", e),
     }
 }
