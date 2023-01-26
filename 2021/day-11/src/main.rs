@@ -39,11 +39,11 @@ fn main() {
             increase_neighbours(&mut squids, x, y);
         }
 
-        for x in 0..squids.len() {
-            for y in 0..squids[x].len() {
-                if squids[x][y].energy > 9 {
-                    squids[x][y].flashed = false;
-                    squids[x][y].energy = 0;
+        for squid_vec in &mut squids {
+            for squid in squid_vec {
+                if squid.energy > 9 {
+                    squid.flashed = false;
+                    squid.energy = 0;
                 }
             }
         }
@@ -59,29 +59,27 @@ fn main() {
     println!("Total flashes: {}", flash_counter);
 }
 
-fn increase_energy(squids: &mut Vec<Vec<Squid>>) {
-    for x in 0..squids.len() {
-        for y in 0..squids[x].len() {
-            squids[x][y].increase_energy();
+fn increase_energy(squids: &mut [Vec<Squid>]) {
+    for squid_vec in &mut squids.iter_mut() {
+        for squid_element in squid_vec {
+            squid_element.increase_energy();
         }
     }
 }
 
 fn increase_neighbours(squids: &mut Vec<Vec<Squid>>, x: usize, y: usize) {
-    for x_diff in -1 as isize..2 {
+    for x_diff in -1_isize..2 {
         let x_delta = x_diff + x as isize;
-        for y_diff in -1 as isize..2 {
+        for y_diff in -1_isize..2 {
             let y_delta = y_diff + y as isize;
 
-            if y_diff == 0 && x_diff != 0
-                || y_diff != 0 && x_diff == 0
-                || y_diff != 0 && x_diff != 0
+            if !(y_diff == 0 && x_diff == 0)
+                && x_delta >= 0
+                && x_delta < (squids.len()) as isize
+                && y_delta >= 0
+                && y_delta < (squids[x].len()) as isize
             {
-                if x_delta >= 0 && x_delta < (squids.len()) as isize {
-                    if y_delta >= 0 && y_delta < (squids[x].len()) as isize {
-                        squids[x_delta as usize][y_delta as usize].increase_energy();
-                    }
-                }
+                squids[x_delta as usize][y_delta as usize].increase_energy();
             }
         }
     }
@@ -89,15 +87,13 @@ fn increase_neighbours(squids: &mut Vec<Vec<Squid>>, x: usize, y: usize) {
 
 fn read_input(file: &str) -> Result<Vec<Vec<Squid>>, Error> {
     let mut squids: Vec<Vec<Squid>> = vec![];
-    let mut counter = 0;
     let content = fs::read_to_string(file)?.replace('\r', "");
-    let data = content.split("\n");
-    for line in data {
+    let data = content.split('\n');
+    for (counter, line) in data.enumerate() {
         squids.push(vec![]);
         for character in line.chars() {
             squids[counter].push(Squid::new(character as i32 - '0' as i32))
         }
-        counter += 1;
     }
 
     Ok(squids)
