@@ -1,9 +1,10 @@
 use squid::Squid;
+use std::io::Error;
 use std::{env::args, fs};
 mod squid;
 
 fn main() {
-    let mut squids = read_input("squids.txt");
+    let mut squids = read_input("squids.txt").expect("Invalid file!");
     let step: isize = args().nth(1).unwrap().parse().unwrap();
     let mut flash_counter = 0;
 
@@ -86,21 +87,18 @@ fn increase_neighbours(squids: &mut Vec<Vec<Squid>>, x: usize, y: usize) {
     }
 }
 
-fn read_input(file: &str) -> Vec<Vec<Squid>> {
+fn read_input(file: &str) -> Result<Vec<Vec<Squid>>, Error> {
     let mut squids: Vec<Vec<Squid>> = vec![];
     let mut counter = 0;
-    if let Ok(content) = fs::read_to_string(file) {
-        let data = content.split("\n");
-        for line in data {
-            squids.push(vec![]);
-            for character in line.chars() {
-                squids[counter].push(Squid::new(character as i32 - '0' as i32))
-            }
-            counter += 1;
+    let content = fs::read_to_string(file)?.replace('\r', "");
+    let data = content.split("\n");
+    for line in data {
+        squids.push(vec![]);
+        for character in line.chars() {
+            squids[counter].push(Squid::new(character as i32 - '0' as i32))
         }
-    } else {
-        panic!("Error while reading file!");
+        counter += 1;
     }
 
-    return squids;
+    Ok(squids)
 }
